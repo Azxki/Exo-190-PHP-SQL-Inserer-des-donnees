@@ -1,50 +1,61 @@
 <?php
 
-/**
- * Pour cet exercice, vous allez utiliser la base de données table_test_php créée pendant l'exo 189
- * Vous utiliserez également les deux tables que vous aviez créées au point 2 ( créer des tables avec PHP )
- */
+$username = 'root';
+$password = '';
+
 
 try {
-    /**
-     * Créez ici votre objet de connection PDO, et utilisez à chaque fois le même objet $pdo ici.
-     */
-    $pdo = new P...;
+    $db = new PDO('mysql:host=localhost;dbname=test;charset=utf8', $username, $password);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $db->beginTransaction();
 
     /**
      * 1. Insérez un nouvel utilisateur dans la table utilisateur.
      */
 
-    // TODO votre code ici.
+    $sql = " INSERT INTO utilisateur (nom, prenom, email, password, adresse, code_postal, pays)
+             VALUES ('Doe', 'John', 'test@test.com', 'test', 'test', 59620, 'France')
+                    ('Doe', 'John', 'test@test.com', 'test', 'test', 59620, 'France')
+             ";
 
 
     /**
      * 2. Insérez un nouveau produit dans la table produit
      */
 
-    // TODO votre code ici.
+    $sql2 = " INSERT INTO produit (titre, prix, description_courte, description_longue)
+             VALUES ('test', 40.56 , 'test', 'test')
+                    ('test', 40.56 , 'test', 'test')
+             ";
 
     /**
      * 3. En une seule requête, ajoutez deux nouveaux utilisateurs à la table utilisateur.
      */
 
-    // TODO Votre code ici.
+    $db->exec($sql);
 
     /**
      * 4. En une seule requête, ajoutez deux produits à la table produit.
      */
 
-    // TODO Votre code ici.
+    $db->exec($sql2);
 
     /**
      * 5. A l'aide des méthodes beginTransaction, commit et rollBack, insérez trois nouveaux utilisateurs dans la table utilisateur.
      */
 
-    // TODO Votre code ici.
+    $db->commit();
 
 
     /**
      * 6. A l'aide des méthodes beginTransaction, commit et rollBack, insérez trois nouveaux produits dans la table produit.
      */
+
+    echo "Utilisateur créer !";
 }
-catch (...)
+catch (PDOException $exception) {
+    echo $exception->getMessage();
+    
+    $db->rollBack();
+}
